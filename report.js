@@ -1,4 +1,8 @@
 const gallery = document.querySelector('#people .section-body');
+const termSelect = document.getElementById('term');
+termSelect?.addEventListener('change', () => {
+ if (termSelect.value.endsWith('.html')) window.location.href = termSelect.value;
+});
 if (gallery) {
  const slides = [
   {src:'assets/interns-start.png', alt:'Fellow interns at the Freedom wall at the beginning of the term', caption:'Our intern group at the beginning of the term.'},
