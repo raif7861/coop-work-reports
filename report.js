@@ -105,6 +105,8 @@ if (owlMark && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
  owlMark.innerHTML = `
   <img class="owl-piece owl-orange" src="assets/intron-owl.png" alt="">
   <img class="owl-piece owl-yellow" src="assets/intron-owl.png" alt="">
+  <span class="owl-eye owl-eye-left"></span>
+  <span class="owl-eye owl-eye-right"></span>
   <img class="owl-piece owl-face-piece" src="assets/intron-owl.png" alt="">
   <img class="owl-piece owl-blue" src="assets/intron-owl.png" alt="">
   <img class="owl-piece owl-green" src="assets/intron-owl.png" alt="">`;
