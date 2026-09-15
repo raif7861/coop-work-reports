@@ -37,3 +37,14 @@
 .carousel-dots button[aria-current=true]{width:48px;background:var(--bright)}
 @media(max-width:600px){.carousel-frame{aspect-ratio:4/3}.carousel-arrow{width:40px;height:40px}.carousel-prev{left:10px}.carousel-next{right:10px}}
 @media print{.carousel-arrow,.carousel-dots{display:none}.carousel-frame{aspect-ratio:auto}.carousel-image{height:auto}.carousel-count{display:none}}
+
+
+/* Small high-contrast mascot finish: transparent, readable, and used only in the Intron section. */
+.owl-mark::after{content:"";position:absolute;inset:12px;border:1px solid rgba(238,113,27,.38);border-radius:50%;opacity:0;z-index:0}
+.owl-eye{position:absolute;top:44%;width:25%;aspect-ratio:1;border-radius:50%;background:#243746;opacity:0;z-index:1;transform-origin:center}
+.owl-eye-left{left:22%}.owl-eye-right{left:59%}
+.owl-face-piece{z-index:2;filter:drop-shadow(0 0 1px rgba(20,43,62,.8)) drop-shadow(0 5px 8px rgba(20,43,62,.24))}
+@media(prefers-reduced-motion:no-preference){.owl-mark.owl-arrived .owl-eye{animation:owl-eye-open 1.25s var(--owl-ease) .68s both}.owl-mark.owl-arrived::after{animation:owl-signal .82s var(--owl-ease) 1.06s both}}
+@keyframes owl-eye-open{0%{opacity:0;transform:scale(.2,.05)}34%{opacity:1;transform:scale(1,.16)}58%{transform:scale(1)}72%{transform:scale(1,.12)}88%,100%{opacity:1;transform:scale(1)}}
+@keyframes owl-signal{0%{opacity:0;transform:scale(.5)}42%{opacity:.65}100%{opacity:0;transform:scale(1.48)}}
+@media(prefers-reduced-motion:reduce){.owl-eye{opacity:1}}
