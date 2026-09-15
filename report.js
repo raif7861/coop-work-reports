@@ -43,3 +43,34 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
  }), {threshold:.03});
  document.querySelectorAll('.report-section').forEach(section => entrance.observe(section));
 }
+
+// Intron logo intro. The pieces use the original transparent logo image with
+// different clipping masks, so the assembled result stays faithful to the mark.
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!reduceMotion) {
+ const loader = document.createElement('div');
+ loader.className = 'intron-loader';
+ loader.setAttribute('aria-hidden', 'true');
+ loader.innerHTML = `
+  <div class="loader-glow"></div>
+  <div class="logo-assembly">
+   <img class="logo-part feather feather-orange" src="assets/intron-owl.png" alt="">
+   <img class="logo-part feather feather-yellow" src="assets/intron-owl.png" alt="">
+   <img class="logo-part owl-face" src="assets/intron-owl.png" alt="">
+   <img class="logo-part feather feather-blue" src="assets/intron-owl.png" alt="">
+   <img class="logo-part feather feather-green" src="assets/intron-owl.png" alt="">
+  </div>
+  <p class="loader-wordmark">INTRÔN</p>
+  <button class="loader-skip" type="button">Skip intro</button>`;
+ document.body.prepend(loader);
+ document.body.classList.add('intro-playing');
+
+ const finishIntro = () => {
+  if (loader.classList.contains('is-leaving')) return;
+  loader.classList.add('is-leaving');
+  document.body.classList.remove('intro-playing');
+  window.setTimeout(() => loader.remove(), 650);
+ };
+ loader.querySelector('.loader-skip').addEventListener('click', finishIntro);
+ window.setTimeout(finishIntro, 4100);
+}
