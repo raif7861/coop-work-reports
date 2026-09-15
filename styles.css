@@ -6,34 +6,34 @@
 @keyframes owl-arrive{0%{opacity:0;transform:translate(90px,-25px) rotate(14deg)}60%{opacity:1;transform:translate(-5px,3px) rotate(-6deg)}100%{opacity:1;transform:none}}
 @media(prefers-reduced-motion:no-preference){.report-section.just-arrived{animation:section-arrive .55s ease-out both}.owl-mark.owl-arrived{animation:owl-arrive 1s cubic-bezier(.2,.7,.3,1) both}}
 @media print{.reading-progress{display:none}.owl-mark{display:none}.report-section.just-arrived{animation:none}}
-
-/* Intron intro timing controls. Change these values to retime the sequence. */
-:root{--intro-entry:.9s;--intro-face:.62s;--intro-crest:.62s;--intro-ease:cubic-bezier(.16,1,.3,1)}
-body.intro-playing{overflow:hidden}
-.intron-loader{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:radial-gradient(circle at 50% 46%,rgba(42,139,205,.3),transparent 34%),linear-gradient(135deg,#07111f 0%,#102542 55%,#2b1a18 100%);overflow:hidden;opacity:1;transition:opacity .58s ease,visibility .58s ease}
-.intron-loader.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
-.loader-glow{position:absolute;width:min(68vw,760px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(64,176,233,.18),transparent 62%);filter:blur(18px);animation:loader-breathe 2.8s ease-in-out both}
-.logo-assembly{position:relative;width:min(56vw,310px);aspect-ratio:1;filter:drop-shadow(0 24px 36px rgba(0,0,0,.34))}
-.logo-part{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:0}
-/* Stage 1: the outside feathers enter and gather at their final positions. */
-.feather-orange{clip-path:polygon(4% 22%,27% 18%,31% 49%,15% 55%,4% 42%);transform-origin:25% 48%;animation:feather-from-left var(--intro-entry) var(--intro-ease) .18s both}
-.feather-yellow{clip-path:polygon(27% 4%,43% 3%,42% 39%,29% 42%,26% 23%);transform-origin:35% 39%;animation:feather-from-top var(--intro-entry) var(--intro-ease) .18s both}
-/* Stage 3: the white face opens after the first two feathers meet. */
-.owl-face{clip-path:polygon(7% 31%,96% 31%,96% 96%,7% 96%);transform-origin:52% 58%;animation:face-open var(--intro-face) var(--intro-ease) 1.02s both}
-/* Stage 4: the middle crest feathers fan out to complete the owl. */
-.feather-blue{clip-path:polygon(12% 10%,32% 9%,35% 42%,23% 46%,12% 31%);transform-origin:29% 43%;animation:crest-blue var(--intro-crest) var(--intro-ease) 1.57s both}
-.feather-green{clip-path:polygon(20% 6%,38% 5%,39% 41%,28% 44%,20% 23%);transform-origin:34% 42%;animation:crest-green var(--intro-crest) var(--intro-ease) 1.67s both}
-.loader-wordmark{position:absolute;top:calc(50% + min(31vw,175px));margin:0;color:#fff;font-size:13px;font-weight:700;letter-spacing:.38em;opacity:0;animation:wordmark-in .6s ease-out 2.18s both}
-.loader-skip{position:absolute;right:24px;bottom:22px;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:8px 14px;background:rgba(7,17,31,.28);color:#fff;font-size:12px;cursor:pointer;opacity:0;animation:skip-in .35s ease 1s forwards}
-.loader-skip:hover{background:rgba(255,255,255,.12)}
-@keyframes feather-from-left{0%{opacity:0;transform:translate(-75vw,22vh) rotate(-58deg) scale(.65)}72%{opacity:1;transform:translate(12px,-4px) rotate(7deg) scale(1.04)}100%{opacity:1;transform:none}}
-@keyframes feather-from-top{0%{opacity:0;transform:translate(42vw,-70vh) rotate(66deg) scale(.65)}72%{opacity:1;transform:translate(-9px,8px) rotate(-8deg) scale(1.04)}100%{opacity:1;transform:none}}
-@keyframes face-open{0%{opacity:0;transform:scale(.18,.06)}58%{opacity:1;transform:scale(1.055,.94)}100%{opacity:1;transform:scale(1)}}
-@keyframes crest-blue{0%{opacity:0;transform:rotate(28deg) scale(.22);filter:blur(5px)}100%{opacity:1;transform:none;filter:blur(0)}}
-@keyframes crest-green{0%{opacity:0;transform:rotate(-24deg) scale(.22);filter:blur(5px)}100%{opacity:1;transform:none;filter:blur(0)}}
-@keyframes wordmark-in{from{opacity:0;transform:translateY(9px);letter-spacing:.55em}to{opacity:.9;transform:none;letter-spacing:.38em}}
-@keyframes skip-in{to{opacity:.75}}
-@keyframes loader-breathe{0%{opacity:.35;transform:scale(.82)}60%,100%{opacity:1;transform:scale(1)}}
-@media(max-width:600px){.logo-assembly{width:min(76vw,290px)}.loader-wordmark{top:calc(50% + min(41vw,165px))}}
-@media(prefers-reduced-motion:reduce){.intron-loader{display:none}}
-@media print{.intron-loader{display:none!important}}
+/* Four-stage Intron reveal, placed in the report section rather than page load. */
+:root{--owl-entry:.7s;--owl-face:.52s;--owl-crest:.5s;--owl-ease:cubic-bezier(.16,1,.3,1)}
+.owl-mark{position:relative;width:94px;height:94px;flex:0 0 94px;overflow:visible;filter:drop-shadow(0 10px 16px rgba(13,38,76,.14))}
+.owl-piece{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:0;opacity:0}
+.owl-orange{clip-path:polygon(4% 22%,27% 18%,31% 49%,15% 55%,4% 42%);transform-origin:25% 48%}
+.owl-yellow{clip-path:polygon(27% 4%,43% 3%,42% 39%,29% 42%,26% 23%);transform-origin:35% 39%}
+.owl-face-piece{clip-path:polygon(7% 31%,96% 31%,96% 96%,7% 96%);transform-origin:52% 58%}
+.owl-blue{clip-path:polygon(12% 10%,32% 9%,35% 42%,23% 46%,12% 31%);transform-origin:29% 43%}
+.owl-green{clip-path:polygon(20% 6%,38% 5%,39% 41%,28% 44%,20% 23%);transform-origin:34% 42%}
+@media(prefers-reduced-motion:no-preference){.owl-mark.owl-arrived .owl-orange{animation:owl-feather-left var(--owl-entry) var(--owl-ease) both}.owl-mark.owl-arrived .owl-yellow{animation:owl-feather-top var(--owl-entry) var(--owl-ease) both}.owl-mark.owl-arrived .owl-face-piece{animation:owl-face-open var(--owl-face) var(--owl-ease) .68s both}.owl-mark.owl-arrived .owl-blue{animation:owl-crest-left var(--owl-crest) var(--owl-ease) 1.14s both}.owl-mark.owl-arrived .owl-green{animation:owl-crest-right var(--owl-crest) var(--owl-ease) 1.22s both}}
+@keyframes owl-feather-left{0%{opacity:0;transform:translate(-150px,58px) rotate(-58deg) scale(.55)}72%{opacity:1;transform:translate(5px,-2px) rotate(7deg) scale(1.04)}100%{opacity:1;transform:none}}
+@keyframes owl-feather-top{0%{opacity:0;transform:translate(120px,-120px) rotate(66deg) scale(.55)}72%{opacity:1;transform:translate(-5px,4px) rotate(-8deg) scale(1.04)}100%{opacity:1;transform:none}}
+@keyframes owl-face-open{0%{opacity:0;transform:scale(.18,.06)}58%{opacity:1;transform:scale(1.055,.94)}100%{opacity:1;transform:scale(1)}}
+@keyframes owl-crest-left{0%{opacity:0;transform:rotate(28deg) scale(.2);filter:blur(3px)}100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes owl-crest-right{0%{opacity:0;transform:rotate(-24deg) scale(.2);filter:blur(3px)}100%{opacity:1;transform:none;filter:blur(0)}}
+@media(prefers-reduced-motion:reduce){.owl-piece{opacity:1}}
+/* Compact, keyboard-friendly gallery for the people section. */
+.photo-carousel{margin-top:28px;outline:none}
+.carousel-frame{position:relative;overflow:hidden;border-radius:12px;background:#eef3f7;aspect-ratio:16/10}
+.carousel-image{width:100%;height:100%;object-fit:cover;border-radius:0;opacity:1;transform:scale(1);transition:opacity .15s ease,transform .32s var(--owl-ease)}
+.carousel-image.is-changing{opacity:.2;transform:scale(1.015)}
+.carousel-arrow{position:absolute;top:50%;translate:0 -50%;display:grid;place-items:center;width:44px;height:44px;border:1px solid rgba(255,255,255,.62);border-radius:50%;background:rgba(12,29,46,.72);color:#fff;font-size:20px;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s ease,transform .2s ease}
+.carousel-arrow:hover{background:rgba(173,67,12,.9);transform:scale(1.06)}
+.carousel-prev{left:16px}.carousel-next{right:16px}
+.carousel-meta{display:flex;justify-content:space-between;gap:24px;align-items:baseline;padding:12px 2px 2px}
+.carousel-caption{margin:0;color:var(--muted);font-size:13px}.carousel-count{color:var(--accent);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.carousel-dots{display:flex;gap:7px;margin-top:12px}
+.carousel-dots button{width:28px;height:5px;padding:0;border:0;border-radius:999px;background:#cad6df;cursor:pointer;transition:width .2s ease,background .2s ease}
+.carousel-dots button[aria-current=true]{width:48px;background:var(--bright)}
+@media(max-width:600px){.carousel-frame{aspect-ratio:4/3}.carousel-arrow{width:40px;height:40px}.carousel-prev{left:10px}.carousel-next{right:10px}}
+@media print{.carousel-arrow,.carousel-dots{display:none}.carousel-frame{aspect-ratio:auto}.carousel-image{height:auto}.carousel-count{display:none}}
