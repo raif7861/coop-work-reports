@@ -1,14 +1,68 @@
-const photo = document.getElementById('moment-photo');
-const caption = document.getElementById('moment-caption');
-document.querySelectorAll('[data-photo]').forEach(button => {
-  button.addEventListener('click', () => {
-    const start = button.dataset.photo === 'start';
-    photo.src = start ? 'assets/interns-start.png' : 'assets/interns-end.png';
-    photo.alt = `Our intern group at the Freedom wall at the ${start ? 'beginning' : 'end'} of the term`;
-    caption.textContent = `Our intern group at the ${start ? 'beginning' : 'end'} of the term.`;
-    document.querySelectorAll('[data-photo]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-  });
-});
+const gallery = document.querySelector('#people .section-body');
+if (gallery) {
+ const slides = [
+  {src:'assets/interns-start.png', alt:'Fellow interns at the Freedom wall at the beginning of the term', caption:'Our intern group at the beginning of the term.'},
+  {src:'assets/interns-end.png', alt:'Fellow interns at the Freedom wall at the end of the term', caption:'Our intern group at the end of the term.'},
+  {src:'assets/intern-meal.png', alt:'Fellow interns sharing a meal', caption:'A meal with fellow interns.'},
+  {src:'assets/team-meal.png', alt:'Interns and the wider team gathered around a restaurant table', caption:'Time together with the wider team.'}
+ ];
+ const oldTabs = gallery.querySelector('.photo-tabs');
+ const oldMain = oldTabs?.nextElementSibling;
+ const oldPair = gallery.querySelector('.photo-pair');
+ const carousel = document.createElement('div');
+ carousel.className = 'photo-carousel';
+ carousel.setAttribute('aria-label', 'Work-term photo gallery');
+ carousel.innerHTML = `
+  <div class="carousel-frame">
+   <img class="carousel-image" src="${slides[0].src}" alt="${slides[0].alt}">
+   <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous photo">←</button>
+   <button class="carousel-arrow carousel-next" type="button" aria-label="Next photo">→</button>
+  </div>
+  <div class="carousel-meta">
+   <p class="carousel-caption" aria-live="polite">${slides[0].caption}</p>
+   <span class="carousel-count" aria-live="polite">1 / ${slides.length}</span>
+  </div>
+  <div class="carousel-dots" aria-label="Choose a photo"></div>`;
+ oldTabs?.replaceWith(carousel);
+ oldMain?.remove();
+ oldPair?.remove();
+
+ const image = carousel.querySelector('.carousel-image');
+ const caption = carousel.querySelector('.carousel-caption');
+ const count = carousel.querySelector('.carousel-count');
+ const dots = carousel.querySelector('.carousel-dots');
+ let currentSlide = 0;
+
+ slides.forEach((slide, index) => {
+  const dot = document.createElement('button');
+  dot.type = 'button';
+  dot.setAttribute('aria-label', `Show photo ${index + 1}: ${slide.caption}`);
+  dot.setAttribute('aria-current', index === 0 ? 'true' : 'false');
+  dot.addEventListener('click', () => showSlide(index));
+  dots.append(dot);
+ });
+
+ function showSlide(index) {
+  currentSlide = (index + slides.length) % slides.length;
+  const slide = slides[currentSlide];
+  image.classList.add('is-changing');
+  window.setTimeout(() => {
+   image.src = slide.src;
+   image.alt = slide.alt;
+   caption.textContent = slide.caption;
+   count.textContent = `${currentSlide + 1} / ${slides.length}`;
+   [...dots.children].forEach((dot, dotIndex) => dot.setAttribute('aria-current', String(dotIndex === currentSlide)));
+   image.classList.remove('is-changing');
+  }, 150);
+ }
+ carousel.querySelector('.carousel-prev').addEventListener('click', () => showSlide(currentSlide - 1));
+ carousel.querySelector('.carousel-next').addEventListener('click', () => showSlide(currentSlide + 1));
+ carousel.tabIndex = 0;
+ carousel.addEventListener('keydown', event => {
+  if (event.key === 'ArrowLeft') showSlide(currentSlide - 1);
+  if (event.key === 'ArrowRight') showSlide(currentSlide + 1);
+ });
+}
 document.getElementById('print-report').addEventListener('click', event => { event.preventDefault(); window.print(); });
 if ('IntersectionObserver' in window) {
  const links = [...document.querySelectorAll('nav a')];
@@ -44,33 +98,14 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
  document.querySelectorAll('.report-section').forEach(section => entrance.observe(section));
 }
 
-// Intron logo intro. The pieces use the original transparent logo image with
-// different clipping masks, so the assembled result stays faithful to the mark.
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (!reduceMotion) {
- const loader = document.createElement('div');
- loader.className = 'intron-loader';
- loader.setAttribute('aria-hidden', 'true');
- loader.innerHTML = `
-  <div class="loader-glow"></div>
-  <div class="logo-assembly">
-   <img class="logo-part feather feather-orange" src="assets/intron-owl.png" alt="">
-   <img class="logo-part feather feather-yellow" src="assets/intron-owl.png" alt="">
-   <img class="logo-part owl-face" src="assets/intron-owl.png" alt="">
-   <img class="logo-part feather feather-blue" src="assets/intron-owl.png" alt="">
-   <img class="logo-part feather feather-green" src="assets/intron-owl.png" alt="">
-  </div>
-  <p class="loader-wordmark">INTRÔN</p>
-  <button class="loader-skip" type="button">Skip intro</button>`;
- document.body.prepend(loader);
- document.body.classList.add('intro-playing');
-
- const finishIntro = () => {
-  if (loader.classList.contains('is-leaving')) return;
-  loader.classList.add('is-leaving');
-  document.body.classList.remove('intro-playing');
-  window.setTimeout(() => loader.remove(), 650);
- };
- loader.querySelector('.loader-skip').addEventListener('click', finishIntro);
- window.setTimeout(finishIntro, 4100);
+// Build the Intron mark from clipped copies of the original transparent logo.
+// The existing section observer adds .owl-arrived when this heading scrolls in.
+const owlMark = document.querySelector('.owl-mark');
+if (owlMark && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+ owlMark.innerHTML = `
+  <img class="owl-piece owl-orange" src="assets/intron-owl.png" alt="">
+  <img class="owl-piece owl-yellow" src="assets/intron-owl.png" alt="">
+  <img class="owl-piece owl-face-piece" src="assets/intron-owl.png" alt="">
+  <img class="owl-piece owl-blue" src="assets/intron-owl.png" alt="">
+  <img class="owl-piece owl-green" src="assets/intron-owl.png" alt="">`;
 }
